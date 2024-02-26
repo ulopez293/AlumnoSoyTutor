@@ -4,12 +4,12 @@ import { DashboardAlumno } from '../components/Dashboard/DashboardAlumno'
 
 export const Panel = () => {
     return (
-        <>
+        <div>
             <Tabs aria-label="Default tabs" style="default">
-                <Tabs.Item active title="Dashboard" icon={MdDashboard as React.FC<React.SVGProps<SVGSVGElement>>}>
+                <Tabs.Item active title="Tablero" icon={MdDashboard as React.FC<React.SVGProps<SVGSVGElement>>}>
                     <DashboardAlumno />
                 </Tabs.Item>
             </Tabs>
-        </>
+        </div>
     )
 }

@@ -1,8 +1,11 @@
-import { atomWithStorage } from 'jotai/utils'
+// import { atomWithStorage } from 'jotai/utils'
+
+import { atom } from "jotai"
 
 interface userData {
     login: boolean
     email: string
+    id_user: number | null | undefined
 }
 
-export const userDataAtom = atomWithStorage<userData>('userData', { login: false, email: `` })
+export const userDataAtom = atom<userData>({ login: false, email: ``, id_user: null })

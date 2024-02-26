@@ -1,3 +1,7 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.bg-footer-image {
+    background-image: url('https://res.cloudinary.com/econsulo/image/upload/v1660531534/Empresas/Footer.png');
+}

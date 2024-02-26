@@ -4,6 +4,8 @@ import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
 import "slick-carousel/slick/slick-theme.css"
 import { useWindowSize } from "../../hooks/useWindowSize"
+import { useAtom } from "jotai"
+import { userDataAtom } from "../../atoms/userDataAtom"
 
 const API_URL = import.meta.env.VITE_APIS_SOYTUTOR as string ?? ""
 
@@ -61,48 +63,50 @@ const convertirFecha = (fechaString: Date) => {
     return fechaFormateada
 }
 
+const settings = {
+    dots: true,
+    infinite: false,
+    speed: 500,
+    slidesToShow: 3,
+    slidesToScroll: 3,
+    initialSlide: 0,
+    responsive: [
+        {
+            breakpoint: 1024,
+            settings: {
+                slidesToShow: 2,
+                slidesToScroll: 2,
+                infinite: true,
+                dots: true
+            }
+        },
+        {
+            breakpoint: 600,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1,
+                initialSlide: 2
+            }
+        },
+        {
+            breakpoint: 480,
+            settings: {
+                slidesToShow: 1,
+                slidesToScroll: 1
+            }
+        }
+    ]
+}
 export const DashboardAlumno = () => {
-    const dashboardSWR = useSWR(API_URL + `/get/dashboard/user/data/${23857}`, fetcher)
+    const [userData] = useAtom(userDataAtom)
+    const dashboardSWR = useSWR(API_URL + `/get/dashboard/user/data/${userData.id_user}`, fetcher)
     const { width } = useWindowSize()
 
     if (dashboardSWR.error) return <h1>failed to load</h1>
     if (dashboardSWR.isLoading) return <h1>loading...</h1>
 
     console.log(dashboardSWR.data)
-    const settings = {
-        dots: true,
-        infinite: false,
-        speed: 500,
-        slidesToShow: 3,
-        slidesToScroll: 3,
-        initialSlide: 0,
-        responsive: [
-            {
-                breakpoint: 1024,
-                settings: {
-                    slidesToShow: 2,
-                    slidesToScroll: 2,
-                    infinite: true,
-                    dots: true
-                }
-            },
-            {
-                breakpoint: 600,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1,
-                    initialSlide: 2
-                }
-            },
-            {
-                breakpoint: 480,
-                settings: {
-                    slidesToShow: 1,
-                    slidesToScroll: 1
-                }
-            }
-        ]
-    }
+
     return (
         <div className="overflow-x-auto pr-10 pl-10">
             <p className="text-4xl font-semibold text-gray-900 mb-5 mt-5">¡Hola {dashboardSWR?.data?.name}!</p>
