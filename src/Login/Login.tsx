@@ -1,8 +1,8 @@
 import { Button, Card, Checkbox, Label, TextInput } from 'flowbite-react'
 import { FormEvent, useState } from 'react'
 import soytutorIMG from '../assets/img/soytutor.png'
-import { useAtom } from 'jotai'
-import { userDataAtom } from '../atoms/userDataAtom'
+// import { useAtom } from 'jotai'
+// import { userDataAtom } from '../atoms/userDataAtom'
 
 const credentials = {
   email: 'admin@soytutor.com',
@@ -10,7 +10,7 @@ const credentials = {
 }
 
 export const Login = () => {
-  const [,setUserData] = useAtom(userDataAtom)
+  //const [,setUserData] = useAtom(userDataAtom)
   
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -26,7 +26,7 @@ export const Login = () => {
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
     e.preventDefault()
     if (email === credentials.email && password === credentials.password) {
-      setUserData({ login: true, email })
+      // setUserData({ login: true, email })
     } else {
       alert('Credenciales inválidas')
       console.error('Credenciales inválidas')

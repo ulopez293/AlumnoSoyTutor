@@ -1,11 +1,11 @@
 import { Avatar, Dropdown, Navbar } from 'flowbite-react'
 import soytutorIMG from '../../assets/img/soytutor.png'
 import react from '../../assets/react.svg'
-import { useAtom } from 'jotai'
-import { userDataAtom } from '../../atoms/userDataAtom'
+// import { useAtom } from 'jotai'
+// import { userDataAtom } from '../../atoms/userDataAtom'
 
 export const Menu = () => {
-  const [, setUserData] = useAtom(userDataAtom)
+  //const [, setUserData] = useAtom(userDataAtom)
 
   return (
     <>
@@ -22,7 +22,9 @@ export const Menu = () => {
               <Avatar alt="User settings" className='me-3' img={react} rounded />
             }
           >
-            <Dropdown.Item onClick={() => { setUserData({ login: false, email: `` }) }}>Sign out</Dropdown.Item>
+            <Dropdown.Item onClick={() => { 
+              //setUserData({ login: false, email: `` }) 
+            }}>Sign out</Dropdown.Item>
           </Dropdown>
           <Navbar.Toggle />
         </div>
