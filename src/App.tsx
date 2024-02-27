@@ -24,7 +24,7 @@ function App() {
     <>
       {
         userData.login ? <div>
-          <br /><br />
+          <br />
           <Panel />
           <br /><br /><br /><br /><br />
           <Pie />
