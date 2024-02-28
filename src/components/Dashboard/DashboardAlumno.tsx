@@ -23,6 +23,7 @@ interface Favoritos {
     image_url: string
     name_mentor: string
     descripcion: string | null | undefined
+    UserName: string | null | undefined
 }
 
 interface DashboardUser {
@@ -107,9 +108,9 @@ export const DashboardAlumno = () => {
 
     console.log(dashboardSWR.data)
 
-    const postMessageSendData = (oid: number) => {
+    const postMessageSendData = (identificador: string | number | null | undefined) => {
         const sendData = {
-            oid_user: oid,
+            oid_user: identificador,
             mensaje: 'CHANGE_PAGE' 
         }
         console.log(`react postMessage: `, sendData)
@@ -171,7 +172,10 @@ export const DashboardAlumno = () => {
                             <Slider {...settings} >
                                 {dashboardSWR?.data?.mentores_favoritos.map((mentor) =>
                                     <div key={mentor.OID}>
-                                        <Card onClick={() => postMessageSendData(mentor.OID)} className="h-96 m-3 mt-0 mb-0 cursor-pointer transform transition-transform hover:scale-105">
+                                        <Card onClick={() => {
+                                                // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+                                                postMessageSendData(mentor.UserName || mentor.OID)
+                                            }} className="h-96 m-3 mt-0 mb-0 cursor-pointer transform transition-transform hover:scale-105">
                                             <div className="flex flex-col items-center pb-10">
                                                 <img className="mb-3 rounded-full shadow-lg" src={mentor.image_url} alt="Bonnie image" height="96" width="96" />
                                                 <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{mentor.name_mentor}</h5>
@@ -183,7 +187,10 @@ export const DashboardAlumno = () => {
                                 )}
                             </Slider> :
                             dashboardSWR?.data?.mentores_favoritos.map((mentor) =>
-                                <Card key={mentor.OID} onClick={() => postMessageSendData(mentor.OID)} className="h-full cursor-pointer transform transition-transform hover:scale-105">
+                                <Card key={mentor.OID} onClick={() => {
+                                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+                                    postMessageSendData(mentor.UserName || mentor.OID)
+                                }} className="h-full cursor-pointer transform transition-transform hover:scale-105">
                                     <div className="flex flex-col items-center pb-10">
                                         <img className="mb-3 rounded-full shadow-lg" src={mentor.image_url} alt="Bonnie image" height="96" width="96" />
                                         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{mentor.name_mentor}</h5>
