@@ -1,4 +1,4 @@
-import { Card, Timeline } from "flowbite-react"
+import { Card, Modal, Timeline } from "flowbite-react"
 import useSWR from "swr"
 import Slider from "react-slick"
 import "slick-carousel/slick/slick.css"
@@ -6,6 +6,8 @@ import "slick-carousel/slick/slick-theme.css"
 import { useWindowSize } from "../../hooks/useWindowSize"
 import { useAtom } from "jotai"
 import { userDataAtom } from "../../atoms/userDataAtom"
+import { useState } from "react"
+import { HiOutlineExclamationCircle } from 'react-icons/hi'
 
 const API_URL = import.meta.env.VITE_APIS_SOYTUTOR as string ?? ""
 
@@ -24,6 +26,7 @@ interface Favoritos {
     name_mentor: string
     descripcion: string | null | undefined
     UserName: string | null | undefined
+    IsMentor: boolean | null | undefined
 }
 
 interface DashboardUser {
@@ -102,6 +105,7 @@ export const DashboardAlumno = () => {
     const [userData] = useAtom(userDataAtom)
     const dashboardSWR = useSWR(API_URL + `/get/dashboard/user/data/${userData.id_user ?? 23857}`, fetcher)
     const { width } = useWindowSize()
+    const [openModal, setOpenModal] = useState(false)
 
     if (dashboardSWR.error) return <h1>failed to load</h1>
     if (dashboardSWR.isLoading) return <h1>loading...</h1>
@@ -111,7 +115,7 @@ export const DashboardAlumno = () => {
     const postMessageSendData = (identificador: string | number | null | undefined) => {
         const sendData = {
             oid_user: identificador,
-            mensaje: 'CHANGE_PAGE' 
+            mensaje: 'CHANGE_PAGE'
         }
         console.log(`react postMessage: `, sendData)
         window.parent.postMessage(sendData, "*")
@@ -165,7 +169,7 @@ export const DashboardAlumno = () => {
                 </Card>
                 <Card href="#" className="max-w-full m-5 cursor-default">
                     <h5 className="text-3xl font-semibold tracking-tight text-gray-900 dark:text-white mb-5">
-                        Mentores Favoritos
+                        Tutores Favoritos
                     </h5>
                     {
                         width > 1400 ?
@@ -173,23 +177,31 @@ export const DashboardAlumno = () => {
                                 {dashboardSWR?.data?.mentores_favoritos.map((mentor) =>
                                     <div key={mentor.OID}>
                                         <Card onClick={() => {
+                                            if (mentor.IsMentor) {
                                                 // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
                                                 postMessageSendData(mentor.UserName || mentor.OID)
-                                            }} className="h-96 m-3 mt-0 mb-0 cursor-pointer transform transition-transform hover:scale-105">
+                                            } else {
+                                                setOpenModal(true)
+                                            }
+                                        }} className="h-96 m-3 mt-0 mb-0 cursor-pointer transform transition-transform hover:scale-105">
                                             <div className="flex flex-col items-center pb-10">
                                                 <img className="mb-3 rounded-full shadow-lg" src={mentor.image_url} alt="Bonnie image" height="96" width="96" />
                                                 <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{mentor.name_mentor}</h5>
                                                 <span className="text-sm text-gray-500 dark:text-gray-400">{mentor.descripcion}</span>
                                             </div>
                                         </Card>
-                                        
+
                                     </div>
                                 )}
                             </Slider> :
                             dashboardSWR?.data?.mentores_favoritos.map((mentor) =>
                                 <Card key={mentor.OID} onClick={() => {
-                                    // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
-                                    postMessageSendData(mentor.UserName || mentor.OID)
+                                    if (mentor.IsMentor) {
+                                        // eslint-disable-next-line @typescript-eslint/prefer-nullish-coalescing
+                                        postMessageSendData(mentor.UserName || mentor.OID)
+                                    } else {
+                                        setOpenModal(true)
+                                    }
                                 }} className="h-full cursor-pointer transform transition-transform hover:scale-105">
                                     <div className="flex flex-col items-center pb-10">
                                         <img className="mb-3 rounded-full shadow-lg" src={mentor.image_url} alt="Bonnie image" height="96" width="96" />
@@ -201,6 +213,18 @@ export const DashboardAlumno = () => {
                     }
                 </Card>
             </div>
+
+            <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
+                <Modal.Header />
+                <Modal.Body>
+                    <div className="text-center">
+                        <HiOutlineExclamationCircle className="mx-auto mb-4 h-14 w-14 text-gray-400 dark:text-gray-200" />
+                        <h3 className="mb-5 text-lg font-normal text-gray-500 dark:text-gray-400">
+                            Queremos informarte de que este tutor actualmente no está disponible. Te sugerimos que reserves una sesión con otro tutor. Te notificaremos en cuanto vuelva a estar disponible.
+                        </h3>
+                    </div>
+                </Modal.Body>
+            </Modal>
         </div>
     )
 }
