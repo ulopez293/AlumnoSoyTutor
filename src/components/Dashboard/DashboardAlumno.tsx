@@ -99,13 +99,22 @@ const settings = {
 }
 export const DashboardAlumno = () => {
     const [userData] = useAtom(userDataAtom)
-    const dashboardSWR = useSWR(API_URL + `/get/dashboard/user/data/${userData.id_user}`, fetcher)
+    const dashboardSWR = useSWR(API_URL + `/get/dashboard/user/data/${userData.id_user ?? 23857}`, fetcher)
     const { width } = useWindowSize()
 
     if (dashboardSWR.error) return <h1>failed to load</h1>
     if (dashboardSWR.isLoading) return <h1>loading...</h1>
 
     console.log(dashboardSWR.data)
+
+    const postMessageSendData = (oid: number) => {
+        const sendData = {
+            oid_user: oid,
+            mensaje: 'CHANGE_PAGE' 
+        }
+        console.log(`react postMessage: `, sendData)
+        window.parent.postMessage(sendData, "*")
+    }
 
     return (
         <div className="overflow-x-auto pr-10 pl-10">
@@ -161,8 +170,8 @@ export const DashboardAlumno = () => {
                         width > 1400 ?
                             <Slider {...settings} >
                                 {dashboardSWR?.data?.mentores_favoritos.map((mentor) =>
-                                    <div key={mentor.OID} style={{ backgroundColor: "red" }}>
-                                        <Card className="h-96 m-3 mt-0 mb-0">
+                                    <div key={mentor.OID}>
+                                        <Card onClick={() => postMessageSendData(mentor.OID)} className="h-96 m-3 mt-0 mb-0 cursor-pointer transform transition-transform hover:scale-105">
                                             <div className="flex flex-col items-center pb-10">
                                                 <img className="mb-3 rounded-full shadow-lg" src={mentor.image_url} alt="Bonnie image" height="96" width="96" />
                                                 <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{mentor.name_mentor}</h5>
@@ -174,7 +183,7 @@ export const DashboardAlumno = () => {
                                 )}
                             </Slider> :
                             dashboardSWR?.data?.mentores_favoritos.map((mentor) =>
-                                <Card key={mentor.OID} className="h-full">
+                                <Card key={mentor.OID} onClick={() => postMessageSendData(mentor.OID)} className="h-full cursor-pointer transform transition-transform hover:scale-105">
                                     <div className="flex flex-col items-center pb-10">
                                         <img className="mb-3 rounded-full shadow-lg" src={mentor.image_url} alt="Bonnie image" height="96" width="96" />
                                         <h5 className="mb-1 text-xl font-medium text-gray-900 dark:text-white">{mentor.name_mentor}</h5>

@@ -31,6 +31,12 @@ function App() {
         </div>
           : <h1>Loding...</h1>
       }
+      {/* <div>
+        <br />
+        <Panel />
+        <br /><br /><br /><br /><br />
+        <Pie />
+      </div> */}
     </>
   )
 }
