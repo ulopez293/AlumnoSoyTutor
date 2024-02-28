@@ -213,7 +213,6 @@ export const DashboardAlumno = () => {
                     }
                 </Card>
             </div>
-
             <Modal show={openModal} size="md" onClose={() => setOpenModal(false)} popup>
                 <Modal.Header />
                 <Modal.Body>
