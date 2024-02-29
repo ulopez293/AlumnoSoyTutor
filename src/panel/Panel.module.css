@@ -1,0 +1,15 @@
+.iframe {
+    height: 100vh;
+    overflow: hidden;
+    position: relative;
+}
+
+iframe {
+    display: block;
+    border: none;
+    height: 100%;
+    width: 100%;
+    position: absolute;
+    top: 0;
+    left: 0;
+}

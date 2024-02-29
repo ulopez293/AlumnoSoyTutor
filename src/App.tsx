@@ -4,9 +4,13 @@ import { Pie } from './components/Footer/Pie'
 import { useAtom } from 'jotai'
 import { userDataAtom } from './atoms/userDataAtom'
 import { useEffect } from 'react'
+import { tabDataAtom } from './atoms/tabDataAtom'
+
+const ENVIRONMENT = import.meta.env.VITE_ENVIRONTMENT as string ?? ""
 
 function App() {
   const [userData, setUserData] = useAtom(userDataAtom)
+  const [tabData, ] = useAtom(tabDataAtom)
   useFlowBiteLoader()
   useEffect(() => {
     // Escucha el mensaje enviado desde la página ASPX
@@ -22,21 +26,26 @@ function App() {
   }, [])
   return (
     <>
-      {
+      {ENVIRONMENT === 'production' ?
         userData.login ? <div>
           <br />
           <Panel />
           <br /><br /><br /><br /><br />
-          <Pie />
+          {tabData.activeFoot ? <>
+            <br /><br /><br /><br /><br />
+            <Pie />
+          </> : null}
         </div>
-          : <h1>Loding...</h1>
+          : <h1>Loading...</h1> :
+        <div>
+          <br />
+          <Panel />
+          {tabData.activeFoot ? <>
+            <br /><br /><br /><br /><br />
+            <Pie />
+          </> : null}
+        </div>
       }
-      {/* <div>
-        <br />
-        <Panel />
-        <br /><br /><br /><br /><br />
-        <Pie />
-      </div> */}
     </>
   )
 }

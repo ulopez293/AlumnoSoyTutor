@@ -8,6 +8,7 @@ import { useAtom } from "jotai"
 import { userDataAtom } from "../../atoms/userDataAtom"
 import { useState } from "react"
 import { HiOutlineExclamationCircle } from 'react-icons/hi'
+import { tabDataAtom } from "../../atoms/tabDataAtom"
 
 const API_URL = import.meta.env.VITE_APIS_SOYTUTOR as string ?? ""
 
@@ -103,6 +104,7 @@ const settings = {
 }
 export const DashboardAlumno = () => {
     const [userData] = useAtom(userDataAtom)
+    const [tabData, setTabData] = useAtom(tabDataAtom)
     const dashboardSWR = useSWR(API_URL + `/get/dashboard/user/data/${userData.id_user ?? 23857}`, fetcher)
     const { width } = useWindowSize()
     const [openModal, setOpenModal] = useState(false)
@@ -121,8 +123,12 @@ export const DashboardAlumno = () => {
         window.parent.postMessage(sendData, "*")
     }
 
+    const handleHover = () => {
+        if (!tabData.activeFoot) setTabData({ activeFoot: true })
+    }
+
     return (
-        <div className="overflow-x-auto pr-10 pl-10">
+        <div className="overflow-x-auto pr-10 pl-10" onMouseEnter={handleHover}>
             <p className="text-4xl font-semibold text-gray-900 mb-5 mt-5">¡Hola {dashboardSWR?.data?.name}!</p>
             <div className="grid 2xl:grid-cols-2 gap-4">
 
