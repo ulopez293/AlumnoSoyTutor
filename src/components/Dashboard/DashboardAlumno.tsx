@@ -106,14 +106,15 @@ const settings = {
 export const DashboardAlumno = () => {
     const [userData] = useAtom(userDataAtom)
     const [tabData, setTabData] = useAtom(tabDataAtom)
-    const dashboardSWR = useSWR(API_URL + `/get/dashboard/user/data/${userData.id_user}`, fetcher)
+    const dashboardSWR = useSWR(API_URL + `/get/dashboard/user/data/${userData.id_user ?? 23857}`, fetcher)
     const { width } = useWindowSize()
     const [openModal, setOpenModal] = useState(false)
 
     if (dashboardSWR.error) return <h1>failed to load</h1>
     if (dashboardSWR.isLoading) return <h1>loading...</h1>
 
-    console.log(dashboardSWR.data)
+    console.log(dashboardSWR.data?.name)
+    
 
     const postMessageSendData = (identificador: string | number | null | undefined) => {
         const sendData = {
